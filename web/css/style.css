@@ -1,1 +1,12 @@
-# Empty CSS file for your own CSS
+#creditos {
+    font-size: 10px;
+}
+
+ body {
+     background: #1d1e1f;
+     color: #ffffff;
+ }
+
+ h3 {
+     color: #3c763d;
+ }
