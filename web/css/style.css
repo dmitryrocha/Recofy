@@ -2,6 +2,10 @@
     font-size: 10px;
 }
 
+#h4error {
+    color: #c9302c;
+}
+
  body {
      background: #1d1e1f;
      color: #ffffff;
@@ -9,4 +13,8 @@
 
  h3 {
      color: #3c763d;
+ }
+
+ .btn {
+     background: #3c763d;
  }
