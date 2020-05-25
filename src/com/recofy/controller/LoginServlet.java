@@ -1,6 +1,8 @@
 package com.recofy.controller;
 
+import com.recofy.DAO.DataSource;
 import com.recofy.DAO.UsuarioDAO;
+import com.recofy.model.Usuario;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,21 +19,27 @@ public class LoginServlet extends HttpServlet {
 
         String email = request.getParameter("txtEmail");
         String senha = request.getParameter("txtSenha");
-        String pagina;
+        Usuario incompleto = new Usuario();
+        incompleto.setEmail(email);
+        incompleto.setSenha(senha);
+        String pagina = "/error.jsp";
+        DataSource ds;
 
-        List<Object> res;
-        UsuarioDAO userDAO = new UsuarioDAO();
-        res = userDAO.read(null);
-
-        if(email.equals("dmy_s@hotmail.com") && senha.equals("1234")) {
-
-            request.getSession().setAttribute("Usuario", res.get(0));
-
-            pagina = "/myaccount.jsp";
-        } else {
-            request.setAttribute("erroSTR", "Email / Senha não encontrados");
-            pagina = "/error.jsp";
+        try{
+            ds = new DataSource();
+            UsuarioDAO userDAO = new UsuarioDAO(ds);
+            List<Object> res = userDAO.read(incompleto);
+            if(res != null && res.size() > 0) {
+                pagina = "/myaccount.jsp";
+                request.getSession().setAttribute("Usuario", res.get(0));
+            } else {
+                request.setAttribute("erroSTR", "Usuário / Senha inválidos");
+            }
+            ds.getConnection().close();
+        } catch (Exception ex) {
+            request.setAttribute("erroSTR", "Deu erro ao recuperar seu usuário");
         }
+
 
         RequestDispatcher disp = getServletContext().getRequestDispatcher(pagina);
         disp.forward(request, response);
